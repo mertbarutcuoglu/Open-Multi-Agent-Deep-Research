@@ -1,0 +1,20 @@
+[project]
+name = "deepsearchagent"
+version = "0.1.0"
+description = "An opinionated, model-agnostic, multi-agent deep research system."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "deepeval>=3.6.6",
+    "dotenv>=0.9.9",
+    "instructor>=1.11.3",
+    "litellm>=1.74.7",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
+    "tavily-python>=0.7.8",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.4",
+]
