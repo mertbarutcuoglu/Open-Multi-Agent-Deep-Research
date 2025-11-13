@@ -18,6 +18,8 @@ An opinionated, model-agnostic deep research system that orchestrates multiple a
   - API keys: `TAVILY_API_KEY` plus one provider key supported by LiteLLM (e.g., `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `AZURE_API_KEY`).
 - Install Dependencies
   - This project uses uv for Python package management.
+  - Create an environment with: `uv venv`
+  - Activate your enviornment with `source .venv/bin/activate`
   - Install dependencies with: `uv pip install -r pyproject.toml`
   - This will install all dependencies specified in `pyproject.toml`.
 - Configure
