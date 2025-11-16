@@ -18,13 +18,12 @@ An opinionated, model-agnostic deep research system that orchestrates multiple a
   - API keys: `TAVILY_API_KEY` plus one provider key supported by LiteLLM (e.g., `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `AZURE_API_KEY`).
 - Install Dependencies
   - This project uses uv for Python package management.
-  - Create an environment with: `uv venv`
-  - Activate your enviornment with `source .venv/bin/activate`
   - Install dependencies with: `uv pip install -r pyproject.toml`
   - This will install all dependencies specified in `pyproject.toml`.
 - Configure
   - Create a `.env` based on `.env.example` and set:
     - `LEAD_AGENT_MODEL` and `SUB_AGENT_MODEL` (model IDs supported by your chosen provider). Optionally, if you are going to run evals, set `JUDGE_EVALUATOR_MODEL`.
+        - As the system relies on tool calling, the models must support tool calling for the deep search system to work.
     - `TAVILY_API_KEY` and a provider API key (e.g., `OPENROUTER_API_KEY`)
   - Provider preference order in code is: `OPENROUTER_API_KEY` → `ANTHROPIC_API_KEY` → `AZURE_API_KEY` → `OPENAI_API_KEY`.
 - Important limitation
