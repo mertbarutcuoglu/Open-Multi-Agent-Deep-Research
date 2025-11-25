@@ -77,7 +77,7 @@ You can find an example deep research output for the eval cases defined under `e
 ## Project Structure
 ```
 /
-├── deep_research/                 # Core research package
+├── deep_research/               # Core research package
 │   ├── agents/
 │   │   └── agent.py             # Agent loop, tool calling, memory integration
 │   ├── services/

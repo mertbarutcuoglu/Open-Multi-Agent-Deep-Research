@@ -100,9 +100,9 @@ class ToolExecutor:
         validate_tool_input(tool_name, tool_input)
 
         if tool_name == "web_search":
-            return self._execute_tavily_search(tool_input)
+            return await self._execute_tavily_search(tool_input)
         if tool_name == "web_extract":
-            return self._execute_tavily_extract(tool_input)
+            return await self._execute_tavily_extract(tool_input)
         if tool_name == "run_subagent":
             return await self._execute_run_subagent(
                 tool_input,
@@ -244,7 +244,7 @@ class ToolExecutor:
             "agent_id": agent_id,
         }
 
-    def _execute_tavily_search(self, tool_input: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_tavily_search(self, tool_input: Dict[str, Any]) -> Dict[str, Any]:
         """
         Execute Tavily search tool.
 
@@ -264,8 +264,8 @@ class ToolExecutor:
             include_domains = tool_input.get("include_domains")
             exclude_domains = tool_input.get("exclude_domains")
 
-            # Perform the search
-            raw_results = self.tavily_client.search(
+            # Perform the search without blocking the event loop
+            raw_results = await self.tavily_client.search(
                 query=query,
                 search_depth=search_depth,
                 max_results=max_results,
@@ -291,7 +291,7 @@ class ToolExecutor:
         except SearchError as e:
             raise ToolExecutionError(f"Tavily search failed: {e}")
 
-    def _execute_tavily_extract(self, tool_input: Dict[str, Any]) -> Dict[str, Any]:
+    async def _execute_tavily_extract(self, tool_input: Dict[str, Any]) -> Dict[str, Any]:
         """
         Execute Tavily extract tool.
 
@@ -308,8 +308,8 @@ class ToolExecutor:
             extract_depth = tool_input.get("extract_depth", "basic")
             format_type = tool_input.get("format", "markdown")
 
-            # Perform the extraction
-            raw_results = self.tavily_client.extract(
+            # Perform the extraction without blocking the event loop
+            raw_results = await self.tavily_client.extract(
                 urls=urls,
                 include_images=include_images,
                 extract_depth=extract_depth,

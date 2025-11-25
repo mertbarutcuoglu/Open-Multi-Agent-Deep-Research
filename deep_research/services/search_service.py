@@ -8,7 +8,8 @@ handling authentication, error management, and response formatting.
 import os
 from typing import Dict, List, Any, Optional
 
-from tavily import TavilyClient
+
+from tavily import AsyncTavilyClient
 
 
 class SearchError(Exception):
@@ -39,11 +40,11 @@ class SearchService:
             )
 
         try:
-            self.client = TavilyClient(api_key=self.api_key)
+            self.client = AsyncTavilyClient(api_key=self.api_key)
         except Exception as e:
             raise SearchError(f"Failed to initialize Tavily client: {e}")
 
-    def search(
+    async def search(
         self,
         query: str,
         search_depth: str = "basic",
@@ -87,8 +88,7 @@ class SearchService:
             if exclude_domains:
                 search_params["exclude_domains"] = exclude_domains
 
-            # Perform the search
-            results = self.client.search(**search_params)
+            results = await self.client.search(**search_params)
 
             # Ensure we have a consistent response format
             if not isinstance(results, dict):
@@ -101,7 +101,7 @@ class SearchService:
                 raise
             raise SearchError(f"Search failed for query '{query}': {e}")
 
-    def extract(
+    async def extract(
         self,
         urls: List[str],
         include_images: bool = False,
@@ -132,8 +132,7 @@ class SearchService:
                 "format": format,
             }
 
-            # Perform the extraction
-            results = self.client.extract(**extract_params)
+            results = await self.client.extract(**extract_params)
 
             # Ensure we have a consistent response format
             if not isinstance(results, dict):
@@ -239,4 +238,5 @@ class SearchService:
             "service": "Tavily API",
             "api_configured": bool(self.api_key),
             "client_initialized": self.client is not None,
+            "client_mode": "async",
         }
