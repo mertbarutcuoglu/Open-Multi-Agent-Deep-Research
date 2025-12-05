@@ -52,10 +52,13 @@ class Memory:
     keep_last_n_turns: int = 5
     max_turns: int = 10
     session_id: Optional[str] = None
+    autosave: bool = False
+    autosave_every: int = 1
 
     _history: List[Rec] = field(default_factory=list, init=False, repr=False)
     _messages: List[Msg] = field(default_factory=list, init=False, repr=False)
     _lock: asyncio.Lock = field(default_factory=asyncio.Lock, init=False, repr=False)
+    _autosave_counter: int = field(default=0, init=False, repr=False)
 
     # ------------------------- Public API -------------------------
 
@@ -164,6 +167,7 @@ class Memory:
             )
 
         if not need_summary:
+            await self._autosave_if_enabled()
             return
 
         # Prepare prefix snapshot for the summarizer outside the lock
@@ -209,6 +213,8 @@ class Memory:
                 new_messages.append(self._sanitize_for_model(rec["msg"]))
 
             self._messages = new_messages
+
+        await self._autosave_if_enabled()
 
     # For observability
     async def _get_full_history(self) -> List[Dict[str, Any]]:
@@ -328,3 +334,18 @@ class Memory:
             except Exception:
                 pass
         return repr(value)
+
+    async def _autosave_if_enabled(self) -> None:
+        """Persist memory to disk when autosave is on and threshold reached."""
+        if not self.autosave:
+            return
+
+        self._autosave_counter += 1
+        if self._autosave_counter < max(1, self.autosave_every):
+            return
+
+        self._autosave_counter = 0
+        try:
+            await self.save()
+        except Exception:
+            logger.exception("Autosave failed")

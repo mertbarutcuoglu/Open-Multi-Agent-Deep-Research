@@ -48,6 +48,8 @@ class Agent:
         tools: Optional[Sequence[ToolName | str]] = None,
         max_consecutive_no_tool: int = 2,
         enable_interleaved_thinking: bool = False,
+        enable_memory_autosave: bool = True,
+        autosave_every: int = 1,
     ) -> None:
         """Configure agent with id, prompt, LLM, and tool policy."""
         self.agent_id = agent_id
@@ -56,7 +58,12 @@ class Agent:
         self.max_consecutive_no_tool = max_consecutive_no_tool
         self.parent_agent_id = parent_agent_id
         self.enable_interleaved_thinking = enable_interleaved_thinking
-        self.memory = Memory(agent_id, llm_client)
+        self.memory = Memory(
+            agent_id,
+            llm_client,
+            autosave=enable_memory_autosave,
+            autosave_every=autosave_every,
+        )
         self._prompt_path = prompt_path
         self._initial_user_message = initial_user_message
         self._logger = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
