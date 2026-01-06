@@ -11,12 +11,14 @@ from litellm.llms.custom_httpx.async_client_cleanup import (
 )
 
 from deep_research.research import start_deep_research
+from deep_research.utils.tracing import init_tracing
 from evals.deep_research import (
     run_evals,
     run_evals_for_test_case,
 )
 
 load_dotenv()
+init_tracing()
 
 
 logging.basicConfig(
