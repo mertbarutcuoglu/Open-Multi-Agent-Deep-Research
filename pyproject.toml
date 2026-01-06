@@ -9,8 +9,10 @@ dependencies = [
     "dotenv>=0.9.9",
     "instructor>=1.11.3",
     "litellm>=1.74.7",
+    "openllmetry>=0.1.7",
     "pytest>=8.4.2",
     "pytest-asyncio>=1.2.0",
+    "traceloop-sdk>=0.23.6",
     "tavily-python>=0.7.8",
 ]
 
